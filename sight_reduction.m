@@ -34,10 +34,11 @@ function [new_position, circle_normals] = sight_reduction(
     printf("\nMovement step\n");
 
     # Move the circles along with the observer.
+    rot = azimuth_rotation(position, course, distance);
     for j = 1 : columns(circle_normals)
-      circle_normals(:, j) = azimuth_rotate(position, course, distance, circle_normals(:, j));
+      circle_normals(:, j) = azimuth_rotate(rot, circle_normals(:, j));
     endfor
-    new_position = azimuth_rotate(position, course, distance, position);
+    new_position = azimuth_rotate(rot, position);
 
     print_new_position(position, new_position);
     position = new_position;

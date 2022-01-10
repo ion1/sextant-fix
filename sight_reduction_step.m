@@ -5,5 +5,6 @@ function [new_position] = sight_reduction_step(position, star_GP, observed_alt)
 
   # If the observed altitude is higher, we are closer to the star than we
   # thought. In that case, move the position toward the star's GP.
-  new_position = azimuth_rotate(position, predicted_az, alt_diff);
+  rot = azimuth_rotation(position, predicted_az, alt_diff);
+  new_position = azimuth_rotate(rot, position);
 endfunction
