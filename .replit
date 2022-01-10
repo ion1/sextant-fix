@@ -1,0 +1,3 @@
+run = ["octave-cli", "-W", "main.m"]
+
+entrypoint = "main.m"
