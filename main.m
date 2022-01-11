@@ -34,8 +34,8 @@ vega_time    = [ 15, 15, 22 ] * (60 .^ [ 0; -1; -2 ]);
 
 eye_height_ft = 9;
 
-capella_observed_alt = corrected_altitude(capella_sextant_alt, eye_height_ft);
-vega_observed_alt    = corrected_altitude(vega_sextant_alt,    eye_height_ft);
+capella_observed_alt = corrected_altitude(capella_sextant_alt, 0, eye_height_ft, 0);
+vega_observed_alt    = corrected_altitude(vega_sextant_alt,    0, eye_height_ft, 0);
 
 printf("Capella Ho: %s\n", dm_str(capella_observed_alt));
 printf("Vega Ho:    %s\n",   dm_str(vega_observed_alt));
