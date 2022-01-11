@@ -1,5 +1,5 @@
 function str = dm_str_base(angle, pos_suffix = "", neg_suffix = "−", mode = "normal")
-  angle_deg = rad2deg(angle);
+  angle_deg = round(rad2deg(angle) * 600) / 600;
   degrees = fix(angle_deg);
   minutes = (angle_deg - degrees) * 60;
 
