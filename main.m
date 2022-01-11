@@ -41,20 +41,14 @@ printf("Capella Ho: %s\n", dm_str(capella_observed_alt));
 printf("Vega Ho:    %s\n",   dm_str(vega_observed_alt));
 
 # https://www.tecepe.com.br/scripts/AlmanacPagesISAPI.dll/pages?date=07%2F21%2F1982
-aries_GHA = [
-  from_dm(149, 0.5) # 14
-  from_dm(164, 3.0) # 15
-  from_dm(179, 5.4) # 16
-];
+# https://thenauticalalmanac.com/TNARegular/2022_Nautical_Almanac.pdf pages 262–281
+aries_GHA_14_55_12 = from_dm(149, 0.5) + from_dm(13, 50.3);
+aries_GHA_15_15_22 = from_dm(164, 3.0) + from_dm( 3, 51.1);
 
 capella_SHA = from_dm(281,  9.7);
 capella_dec = from_dm( 45, 58.7);
 vega_SHA    = from_dm( 80, 54.5);
 vega_dec    = from_dm( 38, 46.1);
-
-# Interpolate using the timestamps.
-aries_GHA_14_55_12 = interp1(aries_GHA, capella_time - 13);
-aries_GHA_15_15_22 = interp1(aries_GHA, vega_time    - 13);
 
 capella_GHA = aries_GHA_14_55_12 + capella_SHA;
 vega_GHA    = aries_GHA_15_15_22 + vega_SHA;
