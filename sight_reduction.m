@@ -53,9 +53,9 @@ function [new_position, circle_normals] = sight_reduction(
   position = new_position;
 endfunction
 
-function print_new_position(position, new_position)
-  [ distance, azimuth ] = distance_azimuth(position, new_position);
+function print_new_position(old_position, new_position)
+  [ distance, azimuth ] = distance_azimuth(old_position, new_position);
 
-  printf("Position: %s\n", vector_str(position));
+  printf("Position: %s\n", vector_str(new_position));
   printf("  Course: %s, distance: %s\n", dm_str(azimuth), dm_str(distance));
 endfunction
