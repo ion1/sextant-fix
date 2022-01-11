@@ -15,8 +15,8 @@ function M = azimuth_rotation_matrix(location)
   # c = |n| |r|: Neither normal has to be a unit vector
 
   # (1) p · r = 0
-  # (2) n · r = |n| |r| cos(azimuth) = c cos(azimuth)
-  # (3) (n × r) · p = |n| |r| sin(azimuth) = c sin(azimuth)
+  # (2) n · r = |n| |r| cos(a) = c cos(a)
+  # (3) (n × r) · p = |n| |r| sin(a) = c sin(a)
 
   #     n = p × north = p × [ 0; 0; 1 ] = [ py; −px; 0 ]
   # (2) n · r = py rx − px ry
@@ -25,8 +25,8 @@ function M = azimuth_rotation_matrix(location)
   # (3) (n × r) · p = px pz rx + py pz ry − (px^2 + py^2) rz
 
   # (1) px rx + py ry + pz rz = 0
-  # (2) py rx − px ry = c cos(azimuth)
-  # (3) px pz rx + py pz ry − (px^2 + py^2) rz = c sin(azimuth)
+  # (2) py rx − px ry = c cos(a)
+  # (3) px pz rx + py pz ry − (px^2 + py^2) rz = c sin(a)
 
   M = [
     px,       py,       pz            # (1)
