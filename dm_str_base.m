@@ -12,7 +12,7 @@ function str = dm_str_base(angle, pos_suffix = "", neg_suffix = "−", mode = "n
   if (strcmp(mode, "normal"))
     format = "%3d°%04.1f′%s";
   elseif (strcmp(mode, "url"))
-    format = "%d%%C2%%B0%04.1f'%s";
+    format = "%d%%C2%%B0%04.1f%%27%s";
   else
     error("Unrecognized mode: %s", mode);
   endif
