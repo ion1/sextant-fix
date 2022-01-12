@@ -18,6 +18,8 @@ pkg load quaternion;
 # Your watch’s Zone Description is +7 hours (UTC = WT+7)
 # The index correction and watch error are both zero.
 
+# Official fix: 25° 15.0’ N, 150° 25.9’ W
+
 # In UTC time:
 # July 19, 1982
 # Vega:    Time = 05:37:30  Sextant Reading = 47° 22.5’
@@ -29,6 +31,7 @@ speed_kn = 6.9;
 speed = speed_kn * 1.852 / 6371;
 
 hawaii = coord_to_vector(from_dm(21, 18), -from_dm(157, 49));
+official_position = coord_to_vector(from_dm(25, 15.0), -from_dm(150, 25.9));
 
 vega_sextant_alt   = from_dm(47, 22.5);
 alkaid_sextant_alt = from_dm(59, 14.0);
@@ -113,3 +116,7 @@ position = fixes(:, fix_ix);
 
 printf("\nResult:\n");
 printf("Position: %s\n", vector_str(position));
+
+printf("Official: %s\n", vector_str(official_position));
+[ azimuth, distance ] = azimuth_distance(position, official_position);
+printf("  Bearing: %s, distance: %s\n", dm_str(azimuth), dm_str(distance));
