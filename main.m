@@ -1,6 +1,4 @@
 clear all;
-# TODO: How to get this to load on repl.it?
-pkg load quaternion;
 
 # https://mctoon.net/sextant-debate/
 # https://mctoon27.files.wordpress.com/2022/01/sextant-challenge.pdf

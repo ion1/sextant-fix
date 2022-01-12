@@ -43,7 +43,7 @@ function [new_position, circle_normals] = sight_reduction(
     rot = azimuth_rotation(position, great_circle_azimuth, great_circle_distance);
 
     for j = 1 : columns(circle_normals)
-      circle_normals(:, j) = azimuth_rotate(rot, circle_normals(:, j));
+      circle_normals(:, j) = rot * circle_normals(:, j);
     endfor
 
     print_new_position(position, new_position);
@@ -78,7 +78,7 @@ function new_position = sight_reduction_step(position, star_GP, observed_alt)
   # If the predicted altitude is higher, we are further from the star than we
   # thought. In that case, move the position toward the star's GP.
   rot = azimuth_rotation(position, predicted_az, alt_diff);
-  new_position = azimuth_rotate(rot, position);
+  new_position = rot * position;
 endfunction
 
 # Predict the azimuth and altitude of a star given an observer location and the

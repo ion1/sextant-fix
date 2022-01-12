@@ -1,9 +1,25 @@
-# Construct a quaternion corresponding to moving vectors toward the given
+# Construct a matrix corresponding to moving vectors toward the given
 # azimuth on the surface of a sphere.
-# q: A quaternion representing the rotation corresponding to the movement
+# M: A matrix representing the rotation corresponding to the movement
 # location: The vector at which the azimuth is evaluated
 # distance: The distance on the surface of the the sphere in radians
-function q = azimuth_rotation(location, azimuth, distance)
+function M = azimuth_rotation(location, azimuth, distance)
   axis = azimuth_rotation_axis(location, azimuth);
-  q = rot2q(axis, distance);
+
+  # https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+
+  # v_rot = v cos(θ) + (axis × v) sin(θ) + axis (axis · v) (1 − cos(θ))
+
+  c = cos(distance);
+  s = sin(distance);
+
+  M = eye(3) * c + skew(axis) * s + axis * axis.' * (1 - c);
+endfunction
+
+function M = skew(v)
+  M = [
+    0     -v(3)   v(2)
+    v(3)   0     -v(1)
+   -v(2)   v(1)   0
+  ];
 endfunction
