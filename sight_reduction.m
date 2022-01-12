@@ -69,9 +69,13 @@ endfunction
 # position: A new position estimate
 function new_position = sight_reduction_step(position, star_GP, observed_alt)
   [ predicted_az, predicted_alt ] = predict_star(position, star_GP);
-  alt_diff = observed_alt - predicted_alt;
+  alt_diff = predicted_alt - observed_alt;
 
-  # If the observed altitude is higher, we are closer to the star than we
+  printf(
+    "Hc: %s Ho: %s diff: %s\n",
+    dm_str(predicted_alt), dm_str(observed_alt), dm_str(alt_diff, " toward", " away"));
+
+  # If the predicted altitude is higher, we are further from the star than we
   # thought. In that case, move the position toward the star's GP.
   rot = azimuth_rotation(position, predicted_az, alt_diff);
   new_position = azimuth_rotate(rot, position);
