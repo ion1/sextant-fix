@@ -33,12 +33,18 @@ function [new_position, circle_normals] = sight_reduction(
 
     printf("\nMovement step\n");
 
-    # Move the circles along with the observer.
-    rot = azimuth_rotation(position, course, distance);
+    # Move along a rhumb line.
+    new_position = move_constant_bearing(position, course, distance);
+
+    # Move the circles of equal altitude along with the observer.
+    [ great_circle_distance, great_circle_azimuth ] = ...
+      distance_azimuth(position, new_position);
+
+    rot = azimuth_rotation(position, great_circle_azimuth, great_circle_distance);
+
     for j = 1 : columns(circle_normals)
       circle_normals(:, j) = azimuth_rotate(rot, circle_normals(:, j));
     endfor
-    new_position = azimuth_rotate(rot, position);
 
     print_new_position(position, new_position);
     position = new_position;
@@ -57,5 +63,5 @@ function print_new_position(old_position, new_position)
   [ distance, azimuth ] = distance_azimuth(old_position, new_position);
 
   printf("Position: %s\n", vector_str(new_position));
-  printf("  Course: %s, distance: %s\n", dm_str(azimuth), dm_str(distance));
+  printf("  Bearing: %s, distance: %s\n", dm_str(azimuth), dm_str(distance));
 endfunction
