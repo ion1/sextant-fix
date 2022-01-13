@@ -1,4 +1,4 @@
-# The distance (in radians) and the azimuth from v1 to v2 on a sphere.
+# The azimuth and the distance (in radians) from v1 to v2 on a sphere.
 function [ azimuth, distance ] = azimuth_distance(v1, v2)
   assert(size(v1) == [ 3, 1 ]);
   assert(size(v2) == [ 3, 1 ]);

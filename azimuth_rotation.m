@@ -1,5 +1,5 @@
-# Construct a matrix corresponding to moving vectors toward the given
-# azimuth on the surface of a sphere.
+# Construct a matrix corresponding to moving a vector toward the given
+# azimuth along a great circle.
 # M: A matrix representing the rotation corresponding to the movement
 # location: The vector at which the azimuth is evaluated
 # distance: The distance on the surface of the the sphere in radians

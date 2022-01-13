@@ -1,6 +1,7 @@
 # Matrix M such that M * axis = [ 0; c cos(a); c sin(a) ] where "axis" is an
-# axis of rotation which moves the location toward an azimuth on a sphere, "a"
-# is the negative azimuth angle and "c" is some non-negative coefficient.
+# axis of rotation which moves the location toward an azimuth along a great
+# circle, "a" is the negative azimuth angle and "c" is some non-negative
+# coefficient.
 function M = azimuth_rotation_matrix(location)
   assert(size(location) == [ 3, 1 ]);
   location = ensure_normalized(location);
