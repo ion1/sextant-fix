@@ -24,9 +24,7 @@ clear all;
 % Alkaid:  Time = 05:40:14  Sextant Reading = 59° 14.0’
 
 course = from_dm(252, 0);
-speed_kn = 6.9;
-% Speed in radians/hour.
-speed = speed_kn * 1.852 / 6371;
+speed = from_knots(6.9);
 
 hawaii = coord_to_vector(from_dm(21, 18), -from_dm(157, 49));
 official_position = coord_to_vector(from_dm(25, 15.0), -from_dm(150, 25.9));
