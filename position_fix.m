@@ -24,17 +24,23 @@ function pos = position_fix(pos_est, GPs, alts)
     predicted_alt = 0.5 * pi - distance;
     observed_alt  = alts(1);
 
-    alt_diff = predicted_alt - observed_alt;
+    alt_corr = observed_alt - predicted_alt;
 
     printf(
-      "Hc: %s Ho: %s diff: %s\n",
-      dm_str(predicted_alt), dm_str(observed_alt),
-      dm_str(alt_diff, " toward", " away"));
+      "Z: %s Hc: %s Ho: %s corr: %s\n",
+      dm_str(predicted_az), dm_str(predicted_alt), dm_str(observed_alt),
+      dm_str(alt_corr, " toward", " away"));
 
-    % If the predicted altitude is higher, we are further from the star than we
-    % thought. In that case, move the position toward the star's GP.
-    rot = azimuth_rotation(pos_est, predicted_az, alt_diff);
+    % If the observed altitude is higher, we are closer to the star than we
+    % thought. In that case, move the position towards the star's GP.
+    rot = azimuth_rotation(pos_est, predicted_az, alt_corr);
     pos = rot * pos_est;
+
+    if (false)
+      % Verify the logic above; the new Hc should equal Ho.
+      [ ~, new_distance ] = azimuth_distance(pos, GPs(:, 1));
+      assert(abs((0.5 * pi - new_distance) - observed_alt) < 1e-12);
+    endif
 
   elseif (num_observations > 1)
     printf(
