@@ -66,55 +66,26 @@ alkaid_GP = coord_to_vector(alkaid_dec, -alkaid_GHA);
 printf("Vega GP:   %s\n", vector_str(vega_GP));
 printf("Alkaid GP: %s\n", vector_str(alkaid_GP));
 
-printf("\nInitial fix (not taking movement into account):\n");
-# Get an initial estimate ignoring the movement between the observations.
-initial_fixes = position_fix(
-  vega_GP,   vega_observed_alt,
-  alkaid_GP, alkaid_observed_alt);
-
-for i = 1:columns(initial_fixes)
-  position = initial_fixes(:, i);
-  printf("  Fix %d: %s\n", i, vector_str(position));
-endfor
-
-[ _, initial_fix_ix ] = min(norm(initial_fixes .- hawaii, "cols"));
-
-printf("Choosing initial fix %d\n", initial_fix_ix);
-initial_fix = initial_fixes(:, initial_fix_ix);
-
-printf("\nSight reduction:\n");
-
-position = initial_fix;
-
-printf("Initial position: %s\n", vector_str(position));
-
-courses          = [ course ];
-distances        = [ speed * (alkaid_time - vega_time) ];
 observation_GPs  = [ vega_GP,           alkaid_GP ];
 observation_alts = [ vega_observed_alt, alkaid_observed_alt ];
 
-[ position, circle_normals ] = sight_reduction(
+position = hawaii;
+printf("Initial position: %s\n", vector_str(position));
+
+printf("\nInitial fix (not taking movement into account):\n");
+
+# Get an initial estimate ignoring the movement between the observations.
+position = position_fix(position, observation_GPs, observation_alts);
+
+printf("\nSight reduction:\n");
+
+courses   = [ course ];
+distances = [ speed * (alkaid_time - vega_time) ];
+
+position = sight_reduction(
   position, courses, distances, observation_GPs, observation_alts);
-
-printf("\nFinal fix:\n");
-
-fixes = position_fix(
-  circle_normals(:, 1), observation_alts(1),
-  circle_normals(:, 2), observation_alts(2));
-
-for i = 1:columns(fixes)
-  printf("  Fix %d: %s\n", i, vector_str(fixes(:, i)));
-endfor
-
-[ _, fix_ix ] = min(norm(fixes .- initial_fix, "cols"));
-
-printf("Choosing fix %d\n", fix_ix);
-
-position = fixes(:, fix_ix);
 
 printf("\nResult:\n");
 printf("Position: %s\n", vector_str(position));
 
-printf("Official: %s\n", vector_str(official_position));
-[ azimuth, distance ] = azimuth_distance(position, official_position);
-printf("  Bearing: %s, distance: %s\n", dm_str(azimuth), dm_str(distance));
+print_new_position(position, official_position, "Official:");
