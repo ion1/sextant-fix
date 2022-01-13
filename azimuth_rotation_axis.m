@@ -1,5 +1,5 @@
 # An axis of rotation which results in movement toward the given azimuth on the
-# surface of a sphere.
+# given location on the surface of a sphere.
 function axis = azimuth_rotation_axis(location, azimuth)
   M = azimuth_rotation_matrix(location);
   # An azimuth angle increases clockwise.
