@@ -1,9 +1,9 @@
-# circle_normals: The normals of the circles whose intersection is the position
-# position: The initial/final position of the observer
-# courses: The course between each observation
-# distances: The distance travelled between each observation
-# observation_GPs: The geographical points of the stars being sighted
-# observation_alts: The altitudes of the stars being sighted
+% circle_normals: The normals of the circles whose intersection is the position
+% position: The initial/final position of the observer
+% courses: The course between each observation
+% distances: The distance travelled between each observation
+% observation_GPs: The geographical points of the stars being sighted
+% observation_alts: The altitudes of the stars being sighted
 function [ position, circle_normals ] = sight_reduction(
   position, courses, distances, observation_GPs, observation_alts)
 
@@ -26,10 +26,10 @@ function [ position, circle_normals ] = sight_reduction(
 
     printf("\nMovement step:\n");
 
-    # Move along a rhumb line.
+    % Move along a rhumb line.
     new_position = move_constant_bearing(position, courses(i), distances(i));
 
-    # Move the circles of equal altitude along with the observer.
+    % Move the circles of equal altitude along with the observer.
 
     [ great_circle_azimuth, great_circle_distance ] = ...
       azimuth_distance(position, new_position);
