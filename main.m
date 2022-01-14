@@ -35,10 +35,10 @@ alkaid_sextant_alt = from_dm(59, 14.0);
 vega_time   = [ 5, 37, 30 ] * (60 .^ [ 0; -1; -2 ]);
 alkaid_time = [ 5, 40, 14 ] * (60 .^ [ 0; -1; -2 ]);
 
-eye_height_ft = 9;
+eye_height = from_feet(9);
 
-vega_observed_alt   = corrected_altitude(vega_sextant_alt,   0, eye_height_ft, 0);
-alkaid_observed_alt = corrected_altitude(alkaid_sextant_alt, 0, eye_height_ft, 0);
+vega_observed_alt   = corrected_altitude(vega_sextant_alt,   0, eye_height, 0);
+alkaid_observed_alt = corrected_altitude(alkaid_sextant_alt, 0, eye_height, 0);
 
 printf("Vega   Hs, Ho: %s %s\n", dm_str(vega_sextant_alt),   dm_str(vega_observed_alt));
 printf("Alkaid Hs, Ho: %s %s\n", dm_str(alkaid_sextant_alt), dm_str(alkaid_observed_alt));
