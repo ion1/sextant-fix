@@ -31,8 +31,8 @@ function [ position, circle_normals ] = sight_reduction(
 
     % Move the circles of equal altitude along with the observer.
 
-    [ great_circle_azimuth, great_circle_distance ] = ...
-      azimuth_distance(position, new_position);
+    great_circle_azimuth  = azimuth(position, new_position);
+    great_circle_distance = distance(position, new_position);
 
     rot = azimuth_rotation(position, great_circle_azimuth, great_circle_distance);
 

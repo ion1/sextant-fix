@@ -20,8 +20,8 @@ function pos = position_fix(pos_est, GPs, alts)
 
     % Predict the azimuth and altitude of a star given an observer location and
     % the star's GP.
-    [ predicted_az, distance ] = azimuth_distance(pos_est, GPs(:, 1));
-    predicted_alt = 0.5 * pi - distance;
+    predicted_az  = azimuth(pos_est, GPs(:, 1));
+    predicted_alt = predicted_altitude(pos_est, GPs(:, 1));
     observed_alt  = alts(1);
 
     alt_corr = observed_alt - predicted_alt;
@@ -38,7 +38,7 @@ function pos = position_fix(pos_est, GPs, alts)
 
     if (false)
       % Verify the logic above; the new Hc should equal Ho.
-      [ ~, new_distance ] = azimuth_distance(pos, GPs(:, 1));
+      new_distance = distance(pos, GPs(:, 1));
       assert(abs((0.5 * pi - new_distance) - observed_alt) < 1e-12);
     endif
 
