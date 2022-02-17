@@ -44,9 +44,12 @@ printf("Vega   Hs, Ho: %s %s\n", dm_str(vega_sextant_alt),   dm_str(vega_observe
 printf("Alkaid Hs, Ho: %s %s\n", dm_str(alkaid_sextant_alt), dm_str(alkaid_observed_alt));
 
 % https://www.tecepe.com.br/scripts/AlmanacPagesISAPI.dll/pages?date=07%2F19%2F1982
-% https://thenauticalalmanac.com/TNARegular/2022_Nautical_Almanac.pdf pages 262–281
-aries_GHA_05_37_30 = from_dm(11, 40.0) + from_dm( 9, 24.0);
-aries_GHA_05_40_14 = from_dm(11, 40.0) + from_dm(10,  5.1);
+aries_GHA_t = [
+  5 from_dm(11, 40.0)
+  6 from_dm(26, 42.5)
+];
+aries_GHA_05_37_30 = interp1(aries_GHA_t(:, 1), aries_GHA_t(:, 2), vega_time);
+aries_GHA_05_40_14 = interp1(aries_GHA_t(:, 1), aries_GHA_t(:, 2), alkaid_time);
 
 vega_SHA   = from_dm( 80, 54.5);
 vega_dec   = from_dm( 38, 46.1);

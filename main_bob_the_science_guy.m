@@ -8,15 +8,20 @@ clear all;
 
 % https://thenauticalalmanac.com/TNARegular/2021_Nautical_Almanac.pdf
 
-sun_GHAs = [
-  from_dm(76, 30.3) + from_dm(8, 15.0) % The beginning of the minute
-  from_dm(76, 30.3) + from_dm(8, 30.0) % The end of the minute
-].';
-sun_dec = from_dm(1, 35.5) - from_dm(0, 1.0) * 33/60;
+sun_GHA_dec_t = [
+  17 from_dm(76, 30.3) from_dm(1, 35.5)
+  18 from_dm(91, 30.6) from_dm(1, 34.5)
+];
+sun_GHA_dec = [
+  interp1(sun_GHA_dec_t(:, 1), sun_GHA_dec_t(:, 2:3),
+    [ 17 33 00 ] * (60 .^ [ 0; -1; -2 ]));
+  interp1(sun_GHA_dec_t(:, 1), sun_GHA_dec_t(:, 2:3),
+    [ 17 34 00 ] * (60 .^ [ 0; -1; -2 ]));
+];
 
 sun_GPs = zeros(3, 0);
-for i = 1 : columns(sun_GHAs)
-  sun_GPs(:, end + 1) = coord_to_vector(sun_dec, -sun_GHAs(i));
+for i = 1 : rows(sun_GHA_dec)
+  sun_GPs(:, end + 1) = coord_to_vector(sun_GHA_dec(i, 2), -sun_GHA_dec(i, 1));
 endfor
 
 err = from_dm(0, 7.2);
