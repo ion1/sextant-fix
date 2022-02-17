@@ -70,7 +70,10 @@ function pos = position_fix(pos_est, GPs, alts)
 
       len = norm(point);
       % Distance from the surface of the sphere.
-      printf("Intersection error: %f\n", len - 1);
+      printf(
+        "Intersection error: %f (equiv: %s)\n",
+        len - 1,
+        nautical_miles_str(len - 1));
       pos = point ./ len;
     endif
 
