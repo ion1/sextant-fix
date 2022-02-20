@@ -211,6 +211,17 @@ function location_4()
 
   eye_height = from_meters(50);
 
+  % https://www.wolframalpha.com/input?i=air+pressure+in+V%C3%ADk+%C3%AD+M%C3%BDrdal+on+2022-02-09+14%3A00%3A00+UTC
+  temperature_air_pressure_t = [
+    14  0  997
+    15 -1  998
+    16 -1 1000
+    17 -2 1001
+    18 -2 1003
+    19 -3 1005
+    20 -4 1007
+  ];
+
   % https://thenauticalalmanac.com/TNARegular/2022_Nautical_Almanac.pdf pages 44, 45
   sun_LL = from_dm(0, 16.2);
   sun_UL = -sun_LL;
@@ -268,8 +279,13 @@ function location_4()
     sextant_alt = observations(i, 2);
     id = observations(i, 3);
     limb_correction = observations(i, 4);
+    temperature = interp1(
+      temperature_air_pressure_t(:, 1), temperature_air_pressure_t(:, 2), t);
+    air_pressure = interp1(
+      temperature_air_pressure_t(:, 1), temperature_air_pressure_t(:, 3), t);
 
-    observed_alt = corrected_altitude(sextant_alt, 0, eye_height, limb_correction);
+    observed_alt = corrected_altitude(
+      sextant_alt, 0, eye_height, limb_correction, temperature, air_pressure);
 
     aries_GHA = interp1(aries_GHA_t(:, 1), aries_GHA_t(:, 2), t);
 
