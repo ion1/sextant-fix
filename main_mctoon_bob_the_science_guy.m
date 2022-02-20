@@ -75,7 +75,7 @@ printf("Initial position: %s\n", vector_str(position));
 printf("\nInitial fix (not taking movement into account):\n");
 
 % Get an initial estimate ignoring the movement between the observations.
-position = position_fix(position, observation_GPs, observation_alts);
+position = position_fix_rough(position, observation_GPs, observation_alts);
 
 printf("\nSight reduction:\n");
 

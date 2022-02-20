@@ -22,7 +22,7 @@ function [ position, circle_normals ] = sight_reduction(
       i, dm_str(observation_alts(:, i)), vector_str(observation_GPs(:, i)));
 
     circle_normals(:, end + 1) = observation_GPs(:, i);
-    position = position_fix(position, circle_normals, observation_alts(:, 1:i));
+    position = position_fix_fine(position, circle_normals, observation_alts(:, 1:i));
 
     printf("\nMovement step:\n");
 
@@ -51,5 +51,5 @@ function [ position, circle_normals ] = sight_reduction(
     vector_str(observation_GPs(:, num_observations)));
 
   circle_normals(:, end + 1) = observation_GPs(:, num_observations);
-  position = position_fix(position, circle_normals, observation_alts);
+  position = position_fix_fine(position, circle_normals, observation_alts);
 endfunction
