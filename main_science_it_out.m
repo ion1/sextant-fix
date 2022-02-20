@@ -287,6 +287,8 @@ function location_4()
     observed_alt = corrected_altitude(
       sextant_alt, 0, eye_height, limb_correction, temperature, air_pressure);
 
+    printf("Hs, Ho: %s %s\n", dm_str(sextant_alt), dm_str(observed_alt));
+
     aries_GHA = interp1(aries_GHA_t(:, 1), aries_GHA_t(:, 2), t);
 
     switch id
