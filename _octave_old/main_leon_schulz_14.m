@@ -4,7 +4,7 @@ clear all;
 % Celestial Exercise for Part 14: A complete Twilight Planning and Shooting
 % Leon Schulz, Reginasailing
 
-% 2020-08-15
+% 2020-10-15
 
 position = coord_to_vector(from_dm(30, 14), -from_dm(14, 15));
 
