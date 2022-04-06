@@ -15,6 +15,8 @@ clear all;
 % Arcturus: 27°9.0′  at 8:30:30 GMT
 % Dubhe: 55°18.4′  at 8:32:15 GMT
 
+% Official result: 29°40.5′N 36°57.0′W
+
 course = from_dm(0, 0);
 speed = from_knots(12);
 
