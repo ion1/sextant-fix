@@ -145,6 +145,7 @@ def plane_intersection(ps, ns):
 
 @dataclass
 class Observation:
+    star: str
     gp: Tuple[Angle, Angle]
     alt: Angle
 
@@ -175,6 +176,7 @@ class NavigationModel(nn.Module):
 
     def forward(self):
         positions = []
+        dist_errors = []
         loss = torch.tensor(0.0)
 
         lat, lon = self.starting_lat, self.starting_lon
@@ -192,6 +194,8 @@ class NavigationModel(nn.Module):
 
                 loss += torch.square(dist_nm)
 
+                dist_errors.append((item.star, dist_nm.item()))
+
             elif isinstance(item, RhumbLineMovement):
                 lat, lon = self.move_rhumb(
                     origin=(lat, lon),
@@ -203,7 +207,7 @@ class NavigationModel(nn.Module):
             else:
                 raise ValueError(f"Invalid log item: {item}")
 
-        return (positions, loss)
+        return (positions, dist_errors, loss)
 
     @classmethod
     def distance_to_circle_nm(cls, pos, gp, alt_deg):
@@ -333,7 +337,7 @@ class CelestialFix:
             "  %s dist: %.0f NM", star, (90.0 - alt_observed.degrees) * 60.0
         )
 
-        obs = Observation(gp=gp, alt=alt_observed)
+        obs = Observation(star=star, gp=gp, alt=alt_observed)
         self.log.append(obs)
 
     def fix(self):
@@ -387,7 +391,7 @@ class CelestialFix:
         losses = []
         for i in range(1000):
             optimizer.zero_grad()
-            positions, loss = model()
+            positions, dist_errors, loss = model()
             loss.backward()
             optimizer.step()
             scheduler.step()
@@ -401,6 +405,13 @@ class CelestialFix:
 
         e = Angle(degrees=model.observation_error.item())
         self.logger.info("  Estimated observation error: %s", format_dm(e, "↑", "↓"))
+
+        self.logger.info(
+            "  Circle of equal altitude distance "
+            + f"error{'' if len(dist_errors) == 1 else 's'}:"
+        )
+        for star, d in dist_errors:
+            self.logger.info("    %7.1f NM %s", d, star)
 
         self.logger.info(f"  Position{'' if len(positions) == 1 else 's'}:")
         for pos in positions:
