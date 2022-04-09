@@ -643,6 +643,7 @@ def test_fix_2():
     cf.add_observation("Rigel", cf.ut1(2020, 10, 15, 6, 37, 9), dms(42, 7))
     cf.add_observation("Aldebaran", cf.ut1(2020, 10, 15, 6, 41, 11), dms(50, 25))
     cf.add_observation("Polaris", cf.ut1(2020, 10, 15, 6, 43, 0), dms(30, 18))
+    # TODO: Venus
     assert format_coord(cf.fix()) == " 29°55.7′N  14°20.4′W"
 
 
@@ -685,6 +686,28 @@ def test_fix_4():
     cf.add_observation("Polaris", cf.ut1(2022, 3, 28, 0, 21, 45, tz=-5), dms(45.6))
     cf.add_observation("Arcturus", cf.ut1(2022, 3, 28, 0, 22, 33, tz=-5), dms(45.7))
     assert format_coord(cf.fix()) == " 46°36.5′N  93°21.4′W"
+
+
+def test_fix_5():
+    def feet_to_m(feet):
+        return feet * 0.3048
+
+    # Official fix: 54°2′S 74°45′W
+
+    cf = CelestialFix(ObservationParams(index_error_min=2.5, eye_height_m=feet_to_m(9)))
+    # http://www.efalk.org/Navigation/leg57-1.html
+    cf.set_bearing_speed(119.3, 10.3)
+    # http://www.efalk.org/Navigation/leg57-4.html
+    cf.add_observation(
+        "Rigil Kentaurus", cf.ut1(1999, 3, 24, 23, 41, 56), dms(35, 14.8)
+    )
+    # http://www.efalk.org/Navigation/leg57-5.html
+    cf.add_observation("Acrux", cf.ut1(1999, 3, 24, 23, 42, 6), dms(48, 40.2))
+    # http://www.efalk.org/Navigation/leg57-6.html
+    cf.add_observation("Aldebaran", cf.ut1(1999, 3, 24, 23, 43, 12), dms(13, 51.6))
+    # http://www.efalk.org/Navigation/leg57-7.html
+    cf.add_observation("Peacock", cf.ut1(1999, 3, 24, 23, 45, 22), dms(22, 24.8))
+    assert format_coord(cf.fix()) == " 54°00.1′S  74°44.8′W"
 
 
 if __name__ == "__main__":
