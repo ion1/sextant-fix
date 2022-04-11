@@ -758,7 +758,9 @@ def test_fix_5():
 
 
 def test_fix_6():
+    # AztroNut66 on YouTube
     # https://www.youtube.com/watch?v=YiMjG8SMXCY&lc=UgzJXGXJ8vVE5u5r4u54AaABAg.9_cJ7WrdQ_m9_cKe8JTGz3
+    # Official position: 39°38′39.22″N 77°34′58.95″W
 
     cf = CelestialFix()
     cf.add_observation(
