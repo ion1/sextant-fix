@@ -52,8 +52,12 @@ class ObservationParams:
     semidiameter_correction_min: float = 0.0
     temperature_degC: float = 10.0
     pressure_Pa: float = 1010.0
+    needs_correction: bool = True
 
     def corrected_altitude(self, alt_sextant):
+        if not self.needs_correction:
+            return alt_sextant
+
         alt_apparent_deg = (
             alt_sextant.degrees - self.index_error_min / 60.0 + self.dip_correction_m()
         )
