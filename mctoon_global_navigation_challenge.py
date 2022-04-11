@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 import torch
@@ -148,6 +148,7 @@ class Observation:
     star: str
     gp: Tuple[Angle, Angle]
     alt: Angle
+    mag: Optional[Angle] = None
 
 
 @dataclass
@@ -194,6 +195,22 @@ class NavigationModel(nn.Module):
 
                 loss += torch.square(dist_nm)
 
+                # Could use the magnetic heading as well; not sure if it's helpful. It
+                # could be harmful given bad measurements. What weight factor to use?
+
+                if False:
+                    if item.mag is not None:
+                        mag = self.angle_to_gp(pos=(lat, lon), gp=(gp_lat, gp_lon))
+                        loss += torch.square(
+                            torch.remainder(
+                                torch.tensor(item.mag.degrees)
+                                - torch.rad2deg(mag)
+                                + 180.0,
+                                2.0 * 180.0,
+                            )
+                            - 180.0
+                        )
+
                 dist_errors.append((item.star, dist_nm.item()))
 
             elif isinstance(item, RhumbLineMovement):
@@ -230,6 +247,19 @@ class NavigationModel(nn.Module):
         )
         distance_rad = 2.0 * torch.arctan2(torch.sqrt(a), torch.sqrt(1.0 - a))
         return torch.rad2deg(distance_rad) * 60.0
+
+    @classmethod
+    def angle_to_gp(cls, pos, gp):
+        """The bearing from pos to the GP (in radians)"""
+        lat1, lon1 = pos[0], pos[1]
+        lat2, lon2 = gp[0], gp[1]
+
+        # https://www.movable-type.co.uk/scripts/latlong.html#bearing
+        y = torch.sin(lon2 - lon1) * torch.cos(lat2)
+        x = torch.cos(lat1) * torch.sin(lat2) - torch.sin(lat1) * torch.cos(
+            lat2
+        ) * torch.cos(lon2 - lon1)
+        return torch.arctan2(y, x)
 
     @classmethod
     def move_rhumb(cls, origin, bearing_rad, distance_nm):
@@ -295,8 +325,12 @@ class CelestialFix:
         self.bearing = Angle(degrees=bearing_deg)
         self.speed_knots = speed_knots
 
-    def add_observation(self, star, time, alt_sextant, observation_params=None):
+    def add_observation(
+        self, star, time, alt_sextant, *, mag=None, observation_params=None
+    ):
         alt_sextant = Angle(degrees=alt_sextant)
+        if mag is not None:
+            mag = Angle(degrees=mag)
 
         if observation_params is None:
             observation_params = self.observation_params
@@ -337,7 +371,10 @@ class CelestialFix:
             "  %s dist: %.0f NM", star, (90.0 - alt_observed.degrees) * 60.0
         )
 
-        obs = Observation(star=star, gp=gp, alt=alt_observed)
+        if mag is not None:
+            self.logger.info("  %s mag: %s", star, format_dm(mag))
+
+        obs = Observation(star=star, gp=gp, alt=alt_observed, mag=mag)
         self.log.append(obs)
 
     def fix(self):
@@ -682,9 +719,15 @@ def test_fix_4():
     # That could be anywhere between 46°36′N 93°18′W and 46°42′N 93°24′W.
 
     cf = CelestialFix()
-    cf.add_observation("Procyon", cf.ut1(2022, 3, 28, 0, 19, 51, tz=-5), dms(25.2))
-    cf.add_observation("Polaris", cf.ut1(2022, 3, 28, 0, 21, 45, tz=-5), dms(45.6))
-    cf.add_observation("Arcturus", cf.ut1(2022, 3, 28, 0, 22, 33, tz=-5), dms(45.7))
+    cf.add_observation(
+        "Procyon", cf.ut1(2022, 3, 28, 0, 19, 51, tz=-5), dms(25.2), mag=dms(248)
+    )
+    cf.add_observation(
+        "Polaris", cf.ut1(2022, 3, 28, 0, 21, 45, tz=-5), dms(45.6), mag=dms(355)
+    )
+    cf.add_observation(
+        "Arcturus", cf.ut1(2022, 3, 28, 0, 22, 33, tz=-5), dms(45.7), mag=dms(118)
+    )
     assert format_coord(cf.fix()) == " 46°36.5′N  93°21.4′W"
 
 
