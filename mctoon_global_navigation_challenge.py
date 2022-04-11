@@ -372,7 +372,7 @@ class CelestialFix:
         gp = self.star_gp(star, time)
         self.logger.info("  %s GP: %s", star, format_coord(gp))
         self.logger.info(
-            "  %s dist: %.0f NM", star, (90.0 - alt_observed.degrees) * 60.0
+            "  %s dist: %.1f NM", star, (90.0 - alt_observed.degrees) * 60.0
         )
 
         if mag is not None:
