@@ -753,5 +753,30 @@ def test_fix_5():
     assert format_coord(cf.fix()) == " 54°00.1′S  74°44.8′W"
 
 
+def test_fix_6():
+    # https://www.youtube.com/watch?v=YiMjG8SMXCY&lc=UgzJXGXJ8vVE5u5r4u54AaABAg.9_cJ7WrdQ_m9_cKe8JTGz3
+
+    cf = CelestialFix()
+    cf.add_observation(
+        "Dubhe",
+        cf.ut1(2022, 4, 9, 0, 28, 0, tz=-4),
+        dms(64, 41.5),
+        mag=dms(337, 2.5),
+    )
+    cf.add_observation(
+        "Regulus",
+        cf.ut1(2022, 4, 9, 0, 30, 0, tz=-4),
+        dms(48, 30.5),
+        mag=dms(237, 45.0),
+    )
+    cf.add_observation(
+        "Arcturus",
+        cf.ut1(2022, 4, 9, 0, 32, 0, tz=-4),
+        dms(59, 23.6),
+        mag=dms(124, 33.2),
+    )
+    assert format_coord(cf.fix()) == " 39°38.6′N  77°34.7′W"
+
+
 if __name__ == "__main__":
     main()
