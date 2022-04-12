@@ -784,5 +784,23 @@ def test_fix_6():
     assert format_coord(cf.fix()) == " 39°38.6′N  77°34.7′W"
 
 
+def test_fix_7():
+    # AztroNut66 on YouTube
+    # https://www.youtube.com/watch?v=YiMjG8SMXCY&lc=UgzJXGXJ8vVE5u5r4u54AaABAg.9_cJ7WrdQ_m9_hD17K8KXD
+    # Official position: 23°34′S 46°38′W
+
+    cf = CelestialFix(ObservationParams(temperature_degC=20, pressure_hPa=1017))
+    cf.add_observation(
+        "Antares", cf.ut1(2022, 4, 11, 0, 25, 30, tz=-3), dms(50.570), mag=dms(103, 37)
+    )
+    cf.add_observation(
+        "Arcturus", cf.ut1(2022, 4, 11, 0, 27, 30, tz=-3), dms(46.367), mag=dms(13, 11)
+    )
+    cf.add_observation(
+        "Regulus", cf.ut1(2022, 4, 11, 0, 29, 30, tz=-3), dms(27.517), mag=dms(298, 40)
+    )
+    assert format_coord(cf.fix()) == " 23°34.1′S  46°37.8′W"
+
+
 if __name__ == "__main__":
     main()
