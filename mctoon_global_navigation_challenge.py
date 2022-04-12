@@ -51,7 +51,7 @@ class ObservationParams:
     eye_height_m: float = 0.0
     semidiameter_correction_min: float = 0.0
     temperature_degC: float = 10.0
-    pressure_Pa: float = 1010.0
+    pressure_hPa: float = 1010.0
     needs_correction: bool = True
 
     def corrected_altitude(self, alt_sextant):
@@ -86,7 +86,7 @@ class ObservationParams:
         minutes_mean = cotd(alt_apparent_min + 7.31 / (alt_apparent_min + 4.4))
 
         minutes = minutes_mean
-        minutes *= (self.pressure_Pa - 80) / 930
+        minutes *= (self.pressure_hPa - 80) / 930
         minutes /= 1 + 8e-5 * (minutes_mean + 30) * (self.temperature_degC - 10)
 
         return -minutes / 60.0
@@ -661,7 +661,7 @@ def test_fix_1():
     # This test case ignores the movement of the ship and is off from the official fix.
     cf = CelestialFix(
         ObservationParams(
-            index_error_min=0.3, eye_height_m=2, temperature_degC=12, pressure_Pa=975
+            index_error_min=0.3, eye_height_m=2, temperature_degC=12, pressure_hPa=975
         )
     )
     cf.set_bearing_speed(0.0, 12.0)
